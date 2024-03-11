@@ -6,6 +6,7 @@ namespace TodoApi.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
+
     private static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -28,5 +29,18 @@ public class WeatherForecastController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+    }
+
+    // GET: WeatherForecast/Izmir
+    [HttpGet("{city}")]
+    public WeatherForecast GetForecastByCity(String city)
+    {
+        //
+        return new WeatherForecast
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        };
     }
 }
