@@ -94,7 +94,11 @@ namespace TodoApi.Controllers
             if (!ModelState.IsValid) {
                 return Problem("Invalid json");
             }
-            _context.TodoItems.Add(todoItem);
+            if (todoItem.Name   == null || todoItem.Name.Length == 0)
+            {
+                return Problem("Need description for todoitem");
+            }
+                _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
@@ -120,6 +124,19 @@ namespace TodoApi.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("Search")]
+        public List<TodoItem> SearchTodoItem(String search)
+        {
+            if (_context.TodoItems == null)
+            {
+                return new List<TodoItem>();
+            }
+            List<TodoItem> ret = _context.TodoItems.Where(t => t.Name != null && t.Name.StartsWith(search)).ToList();
+
+            return ret;
+        }
+
 
         private bool TodoItemExists(long id)
         {
